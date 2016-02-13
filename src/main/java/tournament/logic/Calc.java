@@ -1,4 +1,4 @@
-package tournament;
+package tournament.logic;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
