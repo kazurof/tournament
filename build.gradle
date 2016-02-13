@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+def defaultEncoding = 'UTF-8'
+
+tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
+
+test {
+  testLogging.showStandardStreams = true
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.5'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
+  testCompile 'junit:junit:4.12'
+}
+
