@@ -3,7 +3,7 @@
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout
-        pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg - %location  %n" />
+        pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level - %msg - %location  %n" />
     </Console>
   </Appenders>
   <Loggers>
