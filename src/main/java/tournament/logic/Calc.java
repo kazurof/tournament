@@ -21,14 +21,6 @@ public class Calc {
   static final Logger LOGGER = LogManager.getLogger(Calc.class);
 
 
-  public static void main(String[] args) {
-    String command = args[0];
-    int numOfGame = Integer.parseInt(args[1]);
-
-    if ("gen".equals(command)) {
-      generateAllTornamentToFile(numOfGame);
-    }
-  }
 
   static String determineTornamentDataFileName(int numOfGame) {
     return String.format("data.%d.tsv", numOfGame);
