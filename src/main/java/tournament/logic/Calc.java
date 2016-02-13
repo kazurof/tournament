@@ -30,7 +30,7 @@ public class Calc {
   /**
    * @param numOfGame トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
    */
-  public static void generateAllTornamentToFile(int numOfGame) {
+  public static void generateAllTournamentToFile(int numOfGame) {
     if (numOfGame == 1) {
       Path path = Paths.get(determineTornamentDataFileName(1));
       try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {

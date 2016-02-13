@@ -8,7 +8,7 @@ public class GenerateMain {
     if (args.length != 0) {
       numOfGame = Integer.parseInt(args[0]);
     }
-    Calc.generateAllTornamentToFile(numOfGame);
+    Calc.generateAllTournamentToFile(numOfGame);
   }
 }
 
