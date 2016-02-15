@@ -31,7 +31,7 @@ public class Calc {
    * @param numOfGame height of the tournament. or maximum number of game for one team.
    */
   public static void generateAllTournamentToFile(int numOfGame) {
-    CONSOLE_MESSAGE.info(() -> "generating Tournament combination for number of game =>" + numOfGame);
+    CONSOLE_MESSAGE.info(() -> "generating Tournament combination for number of game => " + numOfGame);
     Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
     if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
       CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
@@ -55,9 +55,9 @@ public class Calc {
     }
 
 
-    int menber = (int) Math.pow(2, numOfGame);
+    int member = (int) Math.pow(2, numOfGame);
     List<Integer> remains = new ArrayList<>();
-    for (int i = 0; i < menber; i++) {
+    for (int i = 0; i < member; i++) {
       remains.add(i);
     }
     List<List<Integer>> thisPatterns = new LinkedList<>();
