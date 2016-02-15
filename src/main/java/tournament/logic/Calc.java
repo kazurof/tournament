@@ -1,9 +1,13 @@
 package tournament.logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -14,23 +18,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class Calc {
   static final Logger LOGGER = LogManager.getLogger(Calc.class);
 
-
-
+  static final Logger CONSOLE_MESSAGE = LogManager.getLogger("tournament.consolemessage");
   static String determineTornamentDataFileName(int numOfGame) {
     return String.format("data.%d.tsv", numOfGame);
   }
 
 
   /**
-   * @param numOfGame トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
+   * @param numOfGame height of the tournament. or maximum number of game for one team.
    */
   public static void generateAllTournamentToFile(int numOfGame) {
+    CONSOLE_MESSAGE.info(() -> "generating Tournament combination for number of game =>" + numOfGame);
+    Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
+    if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
+      CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
+      return ;
+    }
+
     if (numOfGame == 1) {
       Path path = Paths.get(determineTornamentDataFileName(1));
       try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
@@ -41,6 +48,13 @@ public class Calc {
       return;
     }
 
+    Path path = Paths.get(determineTornamentDataFileName(numOfGame - 1));
+
+    if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
+      generateAllTournamentToFile(numOfGame - 1);
+    }
+
+
     int menber = (int) Math.pow(2, numOfGame);
     List<Integer> remains = new ArrayList<>();
     for (int i = 0; i < menber; i++) {
@@ -49,8 +63,8 @@ public class Calc {
     List<List<Integer>> thisPatterns = new LinkedList<>();
     Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
 
-    Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
-    Path path = Paths.get(determineTornamentDataFileName(numOfGame - 1));
+
+
     String prev;
 
     try (BufferedReader br = Files.newBufferedReader(path);
@@ -106,9 +120,9 @@ public class Calc {
    */
   static int[][] analyseFromTournamentDataFile(int numOfGame) {
 
-    int menber = (int) Math.pow(2, numOfGame);
-    int[][] totalResult = new int[menber][];
-    for (int i = 0; i < menber; i++) {
+    int member = (int) Math.pow(2, numOfGame);
+    int[][] totalResult = new int[member][];
+    for (int i = 0; i < member; i++) {
       totalResult[i] = new int[numOfGame + 1];
     }
 
@@ -130,7 +144,7 @@ public class Calc {
         executeTornament(tornament1, tornament1.size());
 
         int numOfWin = 0;
-        int thisMenber = menber;
+        int thisMenber = member;
 
         while (thisMenber != 0) {
           int from = thisMenber / 2;
