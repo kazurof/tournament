@@ -23,7 +23,7 @@ public class Calc {
 
   static final Logger CONSOLE_MESSAGE = LogManager.getLogger("tournament.consolemessage");
 
-  static String determineTornamentDataFileName(int numOfGame) {
+  static String determineTournamentDataFileName(int numOfGame) {
     return String.format("data.%d.tsv", numOfGame);
   }
 
@@ -33,14 +33,14 @@ public class Calc {
    */
   public static void generateAllTournamentToFile(int numOfGame) {
     CONSOLE_MESSAGE.info(() -> "generating Tournament combination for number of game => " + numOfGame);
-    Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
+    Path outFile = Paths.get(determineTournamentDataFileName(numOfGame));
     if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
       CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
       return;
     }
 
     if (numOfGame == 1) {
-      Path path = Paths.get(determineTornamentDataFileName(1));
+      Path path = Paths.get(determineTournamentDataFileName(1));
       try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
         bw.append("0\t1");
       } catch (IOException ex) {
@@ -49,7 +49,7 @@ public class Calc {
       return;
     }
 
-    Path path = Paths.get(determineTornamentDataFileName(numOfGame - 1));
+    Path path = Paths.get(determineTournamentDataFileName(numOfGame - 1));
 
     if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
       generateAllTournamentToFile(numOfGame - 1);
@@ -127,7 +127,7 @@ public class Calc {
     }
 
     String tornament;
-    Path path = Paths.get(determineTornamentDataFileName(numOfGame));
+    Path path = Paths.get(determineTournamentDataFileName(numOfGame));
     int count = 0;
     try (BufferedReader br = Files.newBufferedReader(path)) {
       while ((tornament = br.readLine()) != null) {
