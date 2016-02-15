@@ -88,33 +88,33 @@ public class Calc {
     }
   }
 
-  /**
-   * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
-   *
-   * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
-   * @return
-   */
-  public static int[][] calcStatistics(int numOfGame) {
-    List<LinkedList<Integer>> allTornament = generateAllTornament(numOfGame);
-
-    LOGGER.info("allTornament.size() " + allTornament.size());
-
-    List<List<Integer>> allResult = new ArrayList<>();
-    for (LinkedList<Integer> oneTornament : allTornament) {
-
-      List<Integer> result = executeTornament(oneTornament, oneTornament.size());
-      // LOGGER.info(result);
-      allResult.add(result);
-    }
-
-    return null;
-  }
+//  /**
+//   * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
+//   *
+//   * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
+//   * @return
+//   */
+//  public static int[][] calcStatistics(int numOfGame) {
+//    List<LinkedList<Integer>> allTornament = generateAllTornament(numOfGame);
+//
+//    LOGGER.info("allTornament.size() " + allTornament.size());
+//
+//    List<List<Integer>> allResult = new ArrayList<>();
+//    for (LinkedList<Integer> oneTornament : allTornament) {
+//
+//      List<Integer> result = executeTornament(oneTornament, oneTornament.size());
+//      // LOGGER.info(result);
+//      allResult.add(result);
+//    }
+//
+//    return null;
+//  }
 
 
   /**
    * data.[numOfGame].tsv を読み込み、 トーナメントを実行し、参加者ごとの結果を返します。
    */
-  static int[][] analyseFromTournamentDataFile(int numOfGame) {
+  public static int[][] analyseFromTournamentDataFile(int numOfGame) {
 
     int member = (int) Math.pow(2, numOfGame);
     int[][] totalResult = new int[member][];
@@ -198,41 +198,41 @@ public class Calc {
 
   }
 
-  static List<LinkedList<Integer>> generateAllTornament(int numOfGame) {
-    if (numOfGame == 1) {
-      LinkedList<Integer> oneTornament = new LinkedList<>(Arrays.asList(0, 1));
-      List<LinkedList<Integer>> result = Arrays.asList(oneTornament);
-      return result;
-    }
-
-    int menber = (int) Math.pow(2, numOfGame);
-    List<Integer> remains = new ArrayList<>();
-    for (int i = 0; i < menber; i++) {
-      remains.add(i);
-    }
-    List<List<Integer>> thisPatterns = new LinkedList<>();
-    Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
-
-    List<LinkedList<Integer>> prevTornaments = generateAllTornament(numOfGame - 1);
-    List<LinkedList<Integer>> result = new ArrayList<>();
-    for (List<Integer> tornament : prevTornaments) {
-      for (List<Integer> thispat : thisPatterns) {
-        LinkedList<Integer> newTornament = new LinkedList<>();
-        for (int index : tornament) {
-          int startPos = index * 2;
-          newTornament.add(thispat.get(startPos));
-          newTornament.add(thispat.get(startPos + 1));
-        }
-
-        int size = result.size();
-        if (size % 10000 == 0) {
-          LOGGER.info(result.size());
-        }
-        result.add(newTornament);
-      }
-    }
-    return result;
-  }
+//  static List<LinkedList<Integer>> generateAllTornament(int numOfGame) {
+//    if (numOfGame == 1) {
+//      LinkedList<Integer> oneTornament = new LinkedList<>(Arrays.asList(0, 1));
+//      List<LinkedList<Integer>> result = Arrays.asList(oneTornament);
+//      return result;
+//    }
+//
+//    int menber = (int) Math.pow(2, numOfGame);
+//    List<Integer> remains = new ArrayList<>();
+//    for (int i = 0; i < menber; i++) {
+//      remains.add(i);
+//    }
+//    List<List<Integer>> thisPatterns = new LinkedList<>();
+//    Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
+//
+//    List<LinkedList<Integer>> prevTornaments = generateAllTornament(numOfGame - 1);
+//    List<LinkedList<Integer>> result = new ArrayList<>();
+//    for (List<Integer> tornament : prevTornaments) {
+//      for (List<Integer> thispat : thisPatterns) {
+//        LinkedList<Integer> newTornament = new LinkedList<>();
+//        for (int index : tornament) {
+//          int startPos = index * 2;
+//          newTornament.add(thispat.get(startPos));
+//          newTornament.add(thispat.get(startPos + 1));
+//        }
+//
+//        int size = result.size();
+//        if (size % 10000 == 0) {
+//          LOGGER.info(result.size());
+//        }
+//        result.add(newTornament);
+//      }
+//    }
+//    return result;
+//  }
 
 
   static void calcDoublePermutation(List<List<Integer>> result, List<Integer> candidate,
@@ -281,7 +281,7 @@ public class Calc {
     return executeTornament(tornament, newEnd);
   }
 
-  static void generateResultToFile(int[][] result, ResultType type) {
+  public static void generateResultToFile(int[][] result, ResultType type) {
     int numOfGame = calcNumOfGameByNumOfMember(result.length);
     Path outFile = Paths.get(String.format("result.%d.%s.tsv", numOfGame, type));
     // Path outFile = Paths.get("result." + type + ".tsv");

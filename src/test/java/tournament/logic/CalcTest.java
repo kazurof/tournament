@@ -28,47 +28,47 @@ public class CalcTest {
   @Ignore
   public void test() {
 
-    int[][] result = Calc.calcStatistics(1);
-    assertArrayEquals(new int[] {2}, result[0]);
-    assertArrayEquals(new int[] {2}, result[1]);
+//    int[][] result = Calc.calcStatistics(1);
+//    assertArrayEquals(new int[] {2}, result[0]);
+//    assertArrayEquals(new int[] {2}, result[1]);
 
   }
 
 
 
-  @Test
-  public void testCalcStatistics() {
-
-    // LOGGER.info("---2");
-    // Calc.calcStatistics(2);
-    LOGGER.info("--- 3");
-    Calc.calcStatistics(3);
-    // LOGGER.info("--- 4");
-    // Calc.calcStatistics(4 );
-  }
-
-
-  @Test
-  public void testGenerateAllTornament() {
-
-    System.out.println(Calc.generateAllTornament(1));
-    assertThat(Calc.generateAllTornament(1).toString(), is("[[0, 1]]"));
-
-    System.out.println(Calc.generateAllTornament(2));
-
-    assertThat(Calc.generateAllTornament(2).toString(),
-        is("[[0, 1, 2, 3], [0, 2, 1, 3], [0, 3, 1, 2]]"));
+//  @Test
+//  public void testCalcStatistics() {
+//
+//    // LOGGER.info("---2");
+//    // Calc.calcStatistics(2);
+//    LOGGER.info("--- 3");
+//    Calc.calcStatistics(3);
+//    // LOGGER.info("--- 4");
+//    // Calc.calcStatistics(4 );
+//  }
 
 
-    List<LinkedList<Integer>> resultBy3 = Calc.generateAllTornament(3);
-
-    // System.out.println(resultBy3);
-
-    assertThat(resultBy3.size(), is(315));
-
-    assertThat(resultBy3.get(0).toString(), is("[0, 1, 2, 3, 4, 5, 6, 7]"));
-    assertThat(resultBy3.get(314).toString(), is("[0, 7, 3, 4, 1, 6, 2, 5]"));
-  }
+//  @Test
+//  public void testGenerateAllTornament() {
+//
+//    System.out.println(Calc.generateAllTornament(1));
+//    assertThat(Calc.generateAllTornament(1).toString(), is("[[0, 1]]"));
+//
+//    System.out.println(Calc.generateAllTornament(2));
+//
+//    assertThat(Calc.generateAllTornament(2).toString(),
+//        is("[[0, 1, 2, 3], [0, 2, 1, 3], [0, 3, 1, 2]]"));
+//
+//
+//    List<LinkedList<Integer>> resultBy3 = Calc.generateAllTornament(3);
+//
+//    // System.out.println(resultBy3);
+//
+//    assertThat(resultBy3.size(), is(315));
+//
+//    assertThat(resultBy3.get(0).toString(), is("[0, 1, 2, 3, 4, 5, 6, 7]"));
+//    assertThat(resultBy3.get(314).toString(), is("[0, 7, 3, 4, 1, 6, 2, 5]"));
+//  }
 
   @Test
   public void testCalcDoublePermutation() {
@@ -113,25 +113,25 @@ public class CalcTest {
 
 
 
-  @Test
-  public void testAnalyse() {
-    int numOfGame = 3;
-    List<LinkedList<Integer>> allTornament = Calc.generateAllTornament(numOfGame);
-
-
-
-    List<List<Integer>> allResult = new ArrayList<>();
-    for (LinkedList<Integer> oneTornament : allTornament) {
-
-      List<Integer> result = Calc.executeTornament(oneTornament, oneTornament.size());
-      allResult.add(result);
-    }
-
-    int[][] result = Calc.analyse(allResult, numOfGame);
-
-    LOGGER.info(Arrays.deepToString(result));
-
-  }
+//  @Test
+//  public void testAnalyse() {
+//    int numOfGame = 3;
+//    List<LinkedList<Integer>> allTornament = Calc.generateAllTornament(numOfGame);
+//
+//
+//
+//    List<List<Integer>> allResult = new ArrayList<>();
+//    for (LinkedList<Integer> oneTornament : allTornament) {
+//
+//      List<Integer> result = Calc.executeTornament(oneTornament, oneTornament.size());
+//      allResult.add(result);
+//    }
+//
+//    int[][] result = Calc.analyse(allResult, numOfGame);
+//
+//    LOGGER.info(Arrays.deepToString(result));
+//
+//  }
 
 
   @Test
