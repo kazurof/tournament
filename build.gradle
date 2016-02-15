@@ -22,7 +22,7 @@ dependencies {
 }
 
 task generate(type: JavaExec) {
-  description 'generate all tournament combination, but equivalent one will be omitted.'
+  description 'generate all tournament combination, but equivalent one will be omitted. use -DnumOfGame=1 to specify number of game.'
   main = "tournament.GenerateMain"
   classpath = sourceSets.main.runtimeClasspath
   args(System.properties['numOfGame'] ?: "1")
