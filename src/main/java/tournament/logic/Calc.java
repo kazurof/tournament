@@ -22,6 +22,7 @@ public class Calc {
   static final Logger LOGGER = LogManager.getLogger(Calc.class);
 
   static final Logger CONSOLE_MESSAGE = LogManager.getLogger("tournament.consolemessage");
+
   static String determineTornamentDataFileName(int numOfGame) {
     return String.format("data.%d.tsv", numOfGame);
   }
@@ -35,7 +36,7 @@ public class Calc {
     Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
     if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
       CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
-      return ;
+      return;
     }
 
     if (numOfGame == 1) {
@@ -64,11 +65,10 @@ public class Calc {
     Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
 
 
-
     String prev;
 
     try (BufferedReader br = Files.newBufferedReader(path);
-        BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
+         BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
       while ((prev = br.readLine()) != null) {
 
         String[] oneLine = prev.split("\t");
@@ -94,7 +94,7 @@ public class Calc {
 
   /**
    * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
-   * 
+   *
    * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
    * @return
    */
@@ -134,10 +134,10 @@ public class Calc {
         String[] splitted = tornament.split("\t");
 
 //        LinkedList<Integer> tornament1 = new LinkedList<>();
-        LinkedList<Integer> tornament1 = 
-            Arrays.stream(splitted).map(Integer::parseInt).collect( 
-                LinkedList::new, LinkedList::add ,LinkedList::addAll );
-        
+        LinkedList<Integer> tornament1 =
+          Arrays.stream(splitted).map(Integer::parseInt).collect(
+            LinkedList::new, LinkedList::add, LinkedList::addAll);
+
 //        for (String num : splitted) {
 //          tornament1.add(Integer.parseInt(num));
 //        }
@@ -171,7 +171,7 @@ public class Calc {
 
 
   /**
-   * 
+   *
    */
   static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
 
@@ -240,7 +240,7 @@ public class Calc {
 
 
   static void calcDoublePermutation(List<List<Integer>> result, List<Integer> candidate,
-      List<Integer> remains) {
+                                    List<Integer> remains) {
     int n = remains.size();
     if (n == 0) {
       result.add(candidate);
@@ -303,12 +303,12 @@ public class Calc {
         if (type == ResultType.FRACTION) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
-              .map(Fraction::toString).collect(Collectors.toList());
+            .map(Fraction::toString).collect(Collectors.toList());
         }
         if (type == ResultType.FRACTOIN_IN_FACTORIZATED) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
-              .map(Fraction::toStringWithFactorized).collect(Collectors.toList());
+            .map(Fraction::toStringWithFactorized).collect(Collectors.toList());
         }
         writer.append(String.join("\t", newList));
         writer.append("\n");
