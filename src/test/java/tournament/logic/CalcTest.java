@@ -1,4 +1,4 @@
-package tournament;
+package tournament.logic;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
@@ -34,14 +34,7 @@ public class CalcTest {
 
   }
 
-  @Test
-  public void testgenerateAllTornamentToFile() {
-    Calc.generateAllTornamentToFile(1);
-    Calc.generateAllTornamentToFile(2);
-    Calc.generateAllTornamentToFile(3);
-    // 4の場合は、２３Gのファイルを作る。やむなしか。。。。
-    Calc.generateAllTornamentToFile(4);
-  }
+
 
   @Test
   public void testCalcStatistics() {

@@ -1,9 +1,13 @@
-package tournament;
+package tournament.logic;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -13,34 +17,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.stream.Stream;
 
 public class Calc {
   static final Logger LOGGER = LogManager.getLogger(Calc.class);
 
+  static final Logger CONSOLE_MESSAGE = LogManager.getLogger("tournament.consolemessage");
 
-  public static void main(String[] args) {
-    String command = args[0];
-    int numOfGame = Integer.parseInt(args[1]);
-
-    if ("gen".equals(command)) {
-      generateAllTornamentToFile(numOfGame);
-    }
-  }
-
-  static String determineTornamentDataFileName(int numOfGame) {
+  static String determineTournamentDataFileName(int numOfGame) {
     return String.format("data.%d.tsv", numOfGame);
   }
 
 
   /**
-   * @param numOfGame トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
+   * @param numOfGame height of the tournament. or maximum number of game for one team.
    */
-  static void generateAllTornamentToFile(int numOfGame) {
+  public static void generateAllTournamentToFile(int numOfGame) {
+    CONSOLE_MESSAGE.info(() -> "generating Tournament combination data file for number of game => " + numOfGame);
+    Path outFile = Paths.get(determineTournamentDataFileName(numOfGame));
+    if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
+      CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
+      return;
+    }
+
     if (numOfGame == 1) {
-      Path path = Paths.get(determineTornamentDataFileName(1));
+      Path path = Paths.get(determineTournamentDataFileName(1));
       try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
         bw.append("0\t1");
       } catch (IOException ex) {
@@ -49,20 +50,21 @@ public class Calc {
       return;
     }
 
-    int menber = (int) Math.pow(2, numOfGame);
-    List<Integer> remains = new ArrayList<>();
-    for (int i = 0; i < menber; i++) {
-      remains.add(i);
+    Path path = Paths.get(determineTournamentDataFileName(numOfGame - 1));
+
+    if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
+      generateAllTournamentToFile(numOfGame - 1);
     }
+
+    int member = (int) Math.pow(2, numOfGame);
+    List<Integer> remains = Stream.iterate(0, i -> i + 1).limit(member).collect(Collectors.toList());
+
     List<List<Integer>> thisPatterns = new LinkedList<>();
     Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
 
-    Path outFile = Paths.get(determineTornamentDataFileName(numOfGame));
-    Path path = Paths.get(determineTornamentDataFileName(numOfGame - 1));
-    String prev;
-
     try (BufferedReader br = Files.newBufferedReader(path);
-        BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
+         BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
+      String prev;
       while ((prev = br.readLine()) != null) {
 
         String[] oneLine = prev.split("\t");
@@ -88,7 +90,7 @@ public class Calc {
 
   /**
    * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
-   * 
+   *
    * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
    * @return
    */
@@ -114,31 +116,31 @@ public class Calc {
    */
   static int[][] analyseFromTournamentDataFile(int numOfGame) {
 
-    int menber = (int) Math.pow(2, numOfGame);
-    int[][] totalResult = new int[menber][];
-    for (int i = 0; i < menber; i++) {
+    int member = (int) Math.pow(2, numOfGame);
+    int[][] totalResult = new int[member][];
+    for (int i = 0; i < member; i++) {
       totalResult[i] = new int[numOfGame + 1];
     }
 
     String tornament;
-    Path path = Paths.get(determineTornamentDataFileName(numOfGame));
+    Path path = Paths.get(determineTournamentDataFileName(numOfGame));
     int count = 0;
     try (BufferedReader br = Files.newBufferedReader(path)) {
       while ((tornament = br.readLine()) != null) {
         String[] splitted = tornament.split("\t");
 
 //        LinkedList<Integer> tornament1 = new LinkedList<>();
-        LinkedList<Integer> tornament1 = 
-            Arrays.stream(splitted).map(Integer::parseInt).collect( 
-                LinkedList::new, LinkedList::add ,LinkedList::addAll );
-        
+        LinkedList<Integer> tornament1 =
+          Arrays.stream(splitted).map(Integer::parseInt).collect(
+            LinkedList::new, LinkedList::add, LinkedList::addAll);
+
 //        for (String num : splitted) {
 //          tornament1.add(Integer.parseInt(num));
 //        }
         executeTornament(tornament1, tornament1.size());
 
         int numOfWin = 0;
-        int thisMenber = menber;
+        int thisMenber = member;
 
         while (thisMenber != 0) {
           int from = thisMenber / 2;
@@ -165,7 +167,7 @@ public class Calc {
 
 
   /**
-   * 
+   *
    */
   static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
 
@@ -234,7 +236,7 @@ public class Calc {
 
 
   static void calcDoublePermutation(List<List<Integer>> result, List<Integer> candidate,
-      List<Integer> remains) {
+                                    List<Integer> remains) {
     int n = remains.size();
     if (n == 0) {
       result.add(candidate);
@@ -297,12 +299,12 @@ public class Calc {
         if (type == ResultType.FRACTION) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
-              .map(Fraction::toString).collect(Collectors.toList());
+            .map(Fraction::toString).collect(Collectors.toList());
         }
         if (type == ResultType.FRACTOIN_IN_FACTORIZATED) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
-              .map(Fraction::toStringWithFactorized).collect(Collectors.toList());
+            .map(Fraction::toStringWithFactorized).collect(Collectors.toList());
         }
         writer.append(String.join("\t", newList));
         writer.append("\n");
