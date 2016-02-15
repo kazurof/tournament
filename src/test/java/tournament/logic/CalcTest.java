@@ -150,7 +150,7 @@ public class CalcTest {
 //    int[][] result = Calc.analyseFromTournamentDataFile(4);
 //    Calc.generateResultToFile(result, ResultType.RAW_VALUE);
 //    Calc.generateResultToFile(result, ResultType.FRACTION);
-    Calc.generateResultToFile(result, ResultType.FRACTOIN_IN_FACTORIZATED);
+    Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
      LOGGER.info(Arrays.deepToString(result));
   }
 

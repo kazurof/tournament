@@ -301,7 +301,7 @@ public class Calc {
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
             .map(Fraction::toString).collect(Collectors.toList());
         }
-        if (type == ResultType.FRACTOIN_IN_FACTORIZATED) {
+        if (type == ResultType.FRACTION_IN_FACTORED) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
             .map(Fraction::toStringWithFactorized).collect(Collectors.toList());

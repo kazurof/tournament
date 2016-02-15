@@ -13,6 +13,6 @@ public class AnalyseMain {
 
 
     int[][] result = Calc.analyseFromTournamentDataFile(numOfGame);
-    Calc.generateResultToFile(result, ResultType.FRACTOIN_IN_FACTORIZATED);
+    Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
   }
 }
