@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Calc {
   static final Logger LOGGER = LogManager.getLogger(Calc.class);
@@ -32,7 +33,7 @@ public class Calc {
    * @param numOfGame height of the tournament. or maximum number of game for one team.
    */
   public static void generateAllTournamentToFile(int numOfGame) {
-    CONSOLE_MESSAGE.info(() -> "generating Tournament combination for number of game => " + numOfGame);
+    CONSOLE_MESSAGE.info(() -> "generating Tournament combination data file for number of game => " + numOfGame);
     Path outFile = Paths.get(determineTournamentDataFileName(numOfGame));
     if (Files.exists(outFile, LinkOption.NOFOLLOW_LINKS)) {
       CONSOLE_MESSAGE.info(() -> outFile + " is already generated.");
@@ -55,20 +56,15 @@ public class Calc {
       generateAllTournamentToFile(numOfGame - 1);
     }
 
-
     int member = (int) Math.pow(2, numOfGame);
-    List<Integer> remains = new ArrayList<>();
-    for (int i = 0; i < member; i++) {
-      remains.add(i);
-    }
+    List<Integer> remains = Stream.iterate(0, i -> i + 1).limit(member).collect(Collectors.toList());
+
     List<List<Integer>> thisPatterns = new LinkedList<>();
     Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
 
-
-    String prev;
-
     try (BufferedReader br = Files.newBufferedReader(path);
          BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
+      String prev;
       while ((prev = br.readLine()) != null) {
 
         String[] oneLine = prev.split("\t");
