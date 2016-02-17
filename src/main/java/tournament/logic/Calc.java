@@ -88,29 +88,6 @@ public class Calc {
     }
   }
 
-//  /**
-//   * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
-//   *
-//   * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
-//   * @return
-//   */
-//  public static int[][] calcStatistics(int numOfGame) {
-//    List<LinkedList<Integer>> allTornament = generateAllTornament(numOfGame);
-//
-//    LOGGER.info("allTornament.size() " + allTornament.size());
-//
-//    List<List<Integer>> allResult = new ArrayList<>();
-//    for (LinkedList<Integer> oneTornament : allTornament) {
-//
-//      List<Integer> result = executeTornament(oneTornament, oneTornament.size());
-//      // LOGGER.info(result);
-//      allResult.add(result);
-//    }
-//
-//    return null;
-//  }
-
-
   /**
    * read tournament data(data.[numOfGame].tsv), execute , return result by member.
    */
@@ -152,75 +129,6 @@ public class Calc {
     return new LinkedList<>(Arrays.stream(src).map(Integer::parseInt).collect(Collectors.toList()));
   }
 
-  /**
-   *
-   */
-//  static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
-//
-//    int menber = allTarget.get(0).size();
-//    int[][] totalResult = new int[menber][];
-//    for (int i = 0; i < menber; i++) {
-//      totalResult[i] = new int[numOfGame + 1];
-//    }
-//
-//
-//    for (List<Integer> target : allTarget) {
-//      int numOfWin = 0;
-//      int thisMenber = menber;
-//
-//      while (thisMenber != 0) {
-//        int from = thisMenber / 2;
-//        int to = thisMenber;
-//        for (int i = from; i < to; i++) {
-//          int person = target.get(i);
-//          totalResult[person][numOfWin]++;
-//        }
-//        numOfWin++;
-//        thisMenber = from;
-//      }
-//
-//    }
-//    return totalResult;
-//
-//  }
-
-//  static List<LinkedList<Integer>> generateAllTornament(int numOfGame) {
-//    if (numOfGame == 1) {
-//      LinkedList<Integer> oneTornament = new LinkedList<>(Arrays.asList(0, 1));
-//      List<LinkedList<Integer>> result = Arrays.asList(oneTornament);
-//      return result;
-//    }
-//
-//    int menber = (int) Math.pow(2, numOfGame);
-//    List<Integer> remains = new ArrayList<>();
-//    for (int i = 0; i < menber; i++) {
-//      remains.add(i);
-//    }
-//    List<List<Integer>> thisPatterns = new LinkedList<>();
-//    Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
-//
-//    List<LinkedList<Integer>> prevTornaments = generateAllTornament(numOfGame - 1);
-//    List<LinkedList<Integer>> result = new ArrayList<>();
-//    for (List<Integer> tornament : prevTornaments) {
-//      for (List<Integer> thispat : thisPatterns) {
-//        LinkedList<Integer> newTornament = new LinkedList<>();
-//        for (int index : tornament) {
-//          int startPos = index * 2;
-//          newTornament.add(thispat.get(startPos));
-//          newTornament.add(thispat.get(startPos + 1));
-//        }
-//
-//        int size = result.size();
-//        if (size % 10000 == 0) {
-//          LOGGER.info(result.size());
-//        }
-//        result.add(newTornament);
-//      }
-//    }
-//    return result;
-//  }
-
-
   static void calcDoublePermutation(List<List<Integer>> result, List<Integer> candidate,
                                     List<Integer> remains) {
     int n = remains.size();
@@ -239,7 +147,6 @@ public class Calc {
         List<Integer> removed = new ArrayList<>(remains);
         List<Integer> forNext = new ArrayList<>(addedCandidate);
         forNext.add(removed.remove(i));
-        // String forNext = addedCandidate + removed.remove(i);
         calcDoublePermutation(result, forNext, removed);
       }
     }
@@ -298,17 +205,6 @@ public class Calc {
     }
 
   }
-
-//  static void convertResultFile(int numOfGame, ResultType type) {
-//    int numOfMember = 0;
-//
-//    while (numOfGame != 1) {
-//      numOfMember++;
-//      numOfGame /= 2;
-//    }
-//
-//    LOGGER.info(numOfMember);
-//  }
 
   /**
    * @param numOfMember number of member of tournament. should be 2 , 4, 8 , 16 or some 2^n.
