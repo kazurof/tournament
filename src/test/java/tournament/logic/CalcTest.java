@@ -61,19 +61,19 @@ public class CalcTest {
   public void testExecuteTornament() {
     LinkedList<Integer> tornament1 = new LinkedList<>();
     tornament1.addAll(Arrays.asList(3, 2, 1, 0));
-    Calc.executeTornament(tornament1, tornament1.size());
+    Calc.executeTournament(tornament1, tornament1.size());
     assertThat(tornament1.toString(), is("[0, 2, 3, 1]"));
 
     LinkedList<Integer> tornament2 = new LinkedList<>();
     tornament2.addAll(Arrays.asList(3, 0, 1, 2));
-    Calc.executeTornament(tornament2, tornament2.size());
+    Calc.executeTournament(tornament2, tornament2.size());
     assertThat(tornament2.toString(), is("[0, 1, 3, 2]"));
 
 
     LinkedList<Integer> tornament3 = new LinkedList<>();
     // tornament3.addAll(Arrays.asList(1, 6, 2, 8, 3, 4, 5, 7));
     tornament3.addAll(Arrays.asList(0, 5, 1, 7, 2, 3, 4, 6));
-    Calc.executeTornament(tornament3, tornament3.size());
+    Calc.executeTournament(tornament3, tornament3.size());
     LOGGER.info(tornament3);
     assertThat(tornament3.toString(), is("[0, 2, 1, 4, 5, 7, 3, 6]"));
   }
