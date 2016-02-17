@@ -122,19 +122,11 @@ public class Calc {
       totalResult[i] = new int[numOfGame + 1];
     }
 
-    String tornament;
     Path path = Paths.get(determineTournamentDataFileName(numOfGame));
-    int count = 0;
     try (BufferedReader br = Files.newBufferedReader(path)) {
-      while ((tornament = br.readLine()) != null) {
-        String[] splitted = tornament.split("\t");
-
-        LinkedList<Integer> tornament1 =
-          Arrays.stream(splitted).map(Integer::parseInt).collect(
-            LinkedList::new, LinkedList::add, LinkedList::addAll);
-
-        executeTournament(tornament1, tornament1.size());
-
+      br.lines().map(t -> t.split("\t")).forEach(ary -> {
+        LinkedList<Integer> tournament = convert(ary);
+        executeTournament(tournament, tournament.size());
         int numOfWin = 0;
         int thisMember = member;
 
@@ -142,18 +134,13 @@ public class Calc {
           int from = thisMember / 2;
           int to = thisMember;
           for (int i = from; i < to; i++) {
-            int person = tornament1.get(i);
-            totalResult[person][numOfWin]++;
+            totalResult[tournament.get(i)][numOfWin]++;
           }
           numOfWin++;
           thisMember = from;
         }
+      });
 
-        if (count % 1000000 == 0) {
-          LOGGER.info("count  " + count);
-        }
-        count++;
-      }
     } catch (IOException ex) {
       LOGGER.info(ex.getMessage(), ex);
     }
@@ -161,6 +148,9 @@ public class Calc {
     return totalResult;
   }
 
+  static LinkedList<Integer> convert(String[] src) {
+    return new LinkedList<>(Arrays.stream(src).map(Integer::parseInt).collect(Collectors.toList()));
+  }
 
   /**
    *
