@@ -133,7 +133,7 @@ public class Calc {
           Arrays.stream(splitted).map(Integer::parseInt).collect(
             LinkedList::new, LinkedList::add, LinkedList::addAll);
 
-        executeTornament(tornament1, tornament1.size());
+        executeTournament(tornament1, tornament1.size());
 
         int numOfWin = 0;
         int thisMember = member;
@@ -255,26 +255,26 @@ public class Calc {
     }
   }
 
-  static List<Integer> executeTornament(LinkedList<Integer> tornament, int end) {
+  static List<Integer> executeTournament(LinkedList<Integer> tournament, int end) {
     int until = end / 2;
     for (int i = end; until < i; i--) {
-      int left = tornament.get(i - 2);
-      int right = tornament.get(i - 1);
+      int left = tournament.get(i - 2);
+      int right = tournament.get(i - 1);
 
       if (left < right) {
-        int winner = tornament.remove(i - 2);
-        tornament.addFirst(winner);
+        int winner = tournament.remove(i - 2);
+        tournament.addFirst(winner);
       } else {
-        int winner = tornament.remove(i - 1);
-        tornament.addFirst(winner);
+        int winner = tournament.remove(i - 1);
+        tournament.addFirst(winner);
       }
     }
 
     int newEnd = end / 2;
     if (newEnd == 1) {
-      return tornament;
+      return tournament;
     }
-    return executeTornament(tornament, newEnd);
+    return executeTournament(tournament, newEnd);
   }
 
   public static void generateResultToFile(int[][] result, ResultType type) {
@@ -321,9 +321,9 @@ public class Calc {
 //  }
 
   /**
-   * @return トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
+   * @param numOfMember number of member of tournament. should be 2 , 4, 8 , 16 or some 2^n.
+   * @return height of the tournament. or maximum number of game for one team.
    */
-
   static int calcNumOfGameByNumOfMember(int numOfMember) {
     int numOfGame = 0;
     while (numOfMember != 1) {
