@@ -154,14 +154,14 @@ public class CalcTest {
      LOGGER.info(Arrays.deepToString(result));
   }
 
-  @Test
-  public void convertResultFile() {
-    Calc.convertResultFile(4, ResultType.FRACTION);
-    Calc.convertResultFile(8, ResultType.FRACTION);
-    Calc.convertResultFile(16, ResultType.FRACTION);
-    Calc.convertResultFile(32, ResultType.FRACTION);
-
-  }
+//  @Test
+//  public void convertResultFile() {
+//    Calc.convertResultFile(4, ResultType.FRACTION);
+//    Calc.convertResultFile(8, ResultType.FRACTION);
+//    Calc.convertResultFile(16, ResultType.FRACTION);
+//    Calc.convertResultFile(32, ResultType.FRACTION);
+//
+//  }
 
 
   @Test

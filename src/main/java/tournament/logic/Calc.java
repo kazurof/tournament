@@ -309,16 +309,16 @@ public class Calc {
 
   }
 
-  static void convertResultFile(int numOfGame, ResultType type) {
-    int numOfMember = 0;
-
-    while (numOfGame != 1) {
-      numOfMember++;
-      numOfGame /= 2;
-    }
-
-    LOGGER.info(numOfMember);
-  }
+//  static void convertResultFile(int numOfGame, ResultType type) {
+//    int numOfMember = 0;
+//
+//    while (numOfGame != 1) {
+//      numOfMember++;
+//      numOfGame /= 2;
+//    }
+//
+//    LOGGER.info(numOfMember);
+//  }
 
   /**
    * @return トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
