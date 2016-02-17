@@ -169,34 +169,34 @@ public class Calc {
   /**
    *
    */
-  static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
-
-    int menber = allTarget.get(0).size();
-    int[][] totalResult = new int[menber][];
-    for (int i = 0; i < menber; i++) {
-      totalResult[i] = new int[numOfGame + 1];
-    }
-
-
-    for (List<Integer> target : allTarget) {
-      int numOfWin = 0;
-      int thisMenber = menber;
-
-      while (thisMenber != 0) {
-        int from = thisMenber / 2;
-        int to = thisMenber;
-        for (int i = from; i < to; i++) {
-          int person = target.get(i);
-          totalResult[person][numOfWin]++;
-        }
-        numOfWin++;
-        thisMenber = from;
-      }
-
-    }
-    return totalResult;
-
-  }
+//  static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
+//
+//    int menber = allTarget.get(0).size();
+//    int[][] totalResult = new int[menber][];
+//    for (int i = 0; i < menber; i++) {
+//      totalResult[i] = new int[numOfGame + 1];
+//    }
+//
+//
+//    for (List<Integer> target : allTarget) {
+//      int numOfWin = 0;
+//      int thisMenber = menber;
+//
+//      while (thisMenber != 0) {
+//        int from = thisMenber / 2;
+//        int to = thisMenber;
+//        for (int i = from; i < to; i++) {
+//          int person = target.get(i);
+//          totalResult[person][numOfWin]++;
+//        }
+//        numOfWin++;
+//        thisMenber = from;
+//      }
+//
+//    }
+//    return totalResult;
+//
+//  }
 
 //  static List<LinkedList<Integer>> generateAllTornament(int numOfGame) {
 //    if (numOfGame == 1) {
