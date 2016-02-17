@@ -37,8 +37,6 @@ public class CalcTest {
   }
 
 
-
-
   @Test
   public void testCalcDoublePermutation() {
     List<List<Integer>> result = new ArrayList<>();
@@ -52,7 +50,6 @@ public class CalcTest {
     System.out.println(result.size());
     assertThat(result.size(), is(105));
   }
-
 
 
   @Test
@@ -94,7 +91,7 @@ public class CalcTest {
 //    Calc.generateResultToFile(result, ResultType.RAW_VALUE);
 //    Calc.generateResultToFile(result, ResultType.FRACTION);
     Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
-     LOGGER.info(Arrays.deepToString(result));
+    LOGGER.info(Arrays.deepToString(result));
   }
 
   @Test
