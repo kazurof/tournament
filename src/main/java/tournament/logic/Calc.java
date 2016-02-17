@@ -89,32 +89,9 @@ public class Calc {
   }
 
   /**
-   * トーナメントを実施した際の、各チームの勝ち抜き数分布を返します。
-   *
-   * @param numOfGame １チームの試合数 あるいはトーナメント表の高さ
-   * @return
+   * read tournament data(data.[numOfGame].tsv), execute , return result by member.
    */
-  public static int[][] calcStatistics(int numOfGame) {
-    List<LinkedList<Integer>> allTornament = generateAllTornament(numOfGame);
-
-    LOGGER.info("allTornament.size() " + allTornament.size());
-
-    List<List<Integer>> allResult = new ArrayList<>();
-    for (LinkedList<Integer> oneTornament : allTornament) {
-
-      List<Integer> result = executeTornament(oneTornament, oneTornament.size());
-      // LOGGER.info(result);
-      allResult.add(result);
-    }
-
-    return null;
-  }
-
-
-  /**
-   * data.[numOfGame].tsv を読み込み、 トーナメントを実行し、参加者ごとの結果を返します。
-   */
-  static int[][] analyseFromTournamentDataFile(int numOfGame) {
+  public static int[][] analyseFromTournamentDataFile(int numOfGame) {
 
     int member = (int) Math.pow(2, numOfGame);
     int[][] totalResult = new int[member][];
@@ -122,42 +99,25 @@ public class Calc {
       totalResult[i] = new int[numOfGame + 1];
     }
 
-    String tornament;
     Path path = Paths.get(determineTournamentDataFileName(numOfGame));
-    int count = 0;
     try (BufferedReader br = Files.newBufferedReader(path)) {
-      while ((tornament = br.readLine()) != null) {
-        String[] splitted = tornament.split("\t");
-
-//        LinkedList<Integer> tornament1 = new LinkedList<>();
-        LinkedList<Integer> tornament1 =
-          Arrays.stream(splitted).map(Integer::parseInt).collect(
-            LinkedList::new, LinkedList::add, LinkedList::addAll);
-
-//        for (String num : splitted) {
-//          tornament1.add(Integer.parseInt(num));
-//        }
-        executeTornament(tornament1, tornament1.size());
-
+      br.lines().map(t -> t.split("\t")).forEach(ary -> {
+        LinkedList<Integer> tournament = convert(ary);
+        executeTournament(tournament, tournament.size());
         int numOfWin = 0;
-        int thisMenber = member;
+        int thisMember = member;
 
-        while (thisMenber != 0) {
-          int from = thisMenber / 2;
-          int to = thisMenber;
+        while (thisMember != 0) {
+          int from = thisMember / 2;
+          int to = thisMember;
           for (int i = from; i < to; i++) {
-            int person = tornament1.get(i);
-            totalResult[person][numOfWin]++;
+            totalResult[tournament.get(i)][numOfWin]++;
           }
           numOfWin++;
-          thisMenber = from;
+          thisMember = from;
         }
+      });
 
-        if (count % 1000000 == 0) {
-          LOGGER.info("count  " + count);
-        }
-        count++;
-      }
     } catch (IOException ex) {
       LOGGER.info(ex.getMessage(), ex);
     }
@@ -165,75 +125,9 @@ public class Calc {
     return totalResult;
   }
 
-
-  /**
-   *
-   */
-  static int[][] analyse(List<List<Integer>> allTarget, int numOfGame) {
-
-    int menber = allTarget.get(0).size();
-    int[][] totalResult = new int[menber][];
-    for (int i = 0; i < menber; i++) {
-      totalResult[i] = new int[numOfGame + 1];
-    }
-
-
-    for (List<Integer> target : allTarget) {
-      int numOfWin = 0;
-      int thisMenber = menber;
-
-      while (thisMenber != 0) {
-        int from = thisMenber / 2;
-        int to = thisMenber;
-        for (int i = from; i < to; i++) {
-          int person = target.get(i);
-          totalResult[person][numOfWin]++;
-        }
-        numOfWin++;
-        thisMenber = from;
-      }
-
-    }
-    return totalResult;
-
+  static LinkedList<Integer> convert(String[] src) {
+    return new LinkedList<>(Arrays.stream(src).map(Integer::parseInt).collect(Collectors.toList()));
   }
-
-  static List<LinkedList<Integer>> generateAllTornament(int numOfGame) {
-    if (numOfGame == 1) {
-      LinkedList<Integer> oneTornament = new LinkedList<>(Arrays.asList(0, 1));
-      List<LinkedList<Integer>> result = Arrays.asList(oneTornament);
-      return result;
-    }
-
-    int menber = (int) Math.pow(2, numOfGame);
-    List<Integer> remains = new ArrayList<>();
-    for (int i = 0; i < menber; i++) {
-      remains.add(i);
-    }
-    List<List<Integer>> thisPatterns = new LinkedList<>();
-    Calc.calcDoublePermutation(thisPatterns, new ArrayList<>(), remains);
-
-    List<LinkedList<Integer>> prevTornaments = generateAllTornament(numOfGame - 1);
-    List<LinkedList<Integer>> result = new ArrayList<>();
-    for (List<Integer> tornament : prevTornaments) {
-      for (List<Integer> thispat : thisPatterns) {
-        LinkedList<Integer> newTornament = new LinkedList<>();
-        for (int index : tornament) {
-          int startPos = index * 2;
-          newTornament.add(thispat.get(startPos));
-          newTornament.add(thispat.get(startPos + 1));
-        }
-
-        int size = result.size();
-        if (size % 10000 == 0) {
-          LOGGER.info(result.size());
-        }
-        result.add(newTornament);
-      }
-    }
-    return result;
-  }
-
 
   static void calcDoublePermutation(List<List<Integer>> result, List<Integer> candidate,
                                     List<Integer> remains) {
@@ -253,40 +147,37 @@ public class Calc {
         List<Integer> removed = new ArrayList<>(remains);
         List<Integer> forNext = new ArrayList<>(addedCandidate);
         forNext.add(removed.remove(i));
-        // String forNext = addedCandidate + removed.remove(i);
         calcDoublePermutation(result, forNext, removed);
       }
     }
   }
 
-  static List<Integer> executeTornament(LinkedList<Integer> tornament, int end) {
+  static List<Integer> executeTournament(LinkedList<Integer> tournament, int end) {
     int until = end / 2;
     for (int i = end; until < i; i--) {
-      int left = tornament.get(i - 2);
-      int right = tornament.get(i - 1);
+      int left = tournament.get(i - 2);
+      int right = tournament.get(i - 1);
 
       if (left < right) {
-        int winner = tornament.remove(i - 2);
-        tornament.addFirst(winner);
+        int winner = tournament.remove(i - 2);
+        tournament.addFirst(winner);
       } else {
-        int winner = tornament.remove(i - 1);
-        tornament.addFirst(winner);
+        int winner = tournament.remove(i - 1);
+        tournament.addFirst(winner);
       }
     }
 
     int newEnd = end / 2;
     if (newEnd == 1) {
-      return tornament;
+      return tournament;
     }
-    return executeTornament(tornament, newEnd);
+    return executeTournament(tournament, newEnd);
   }
 
-  static void generateResultToFile(int[][] result, ResultType type) {
+  public static void generateResultToFile(int[][] result, ResultType type) {
     int numOfGame = calcNumOfGameByNumOfMember(result.length);
     Path outFile = Paths.get(String.format("result.%d.%s.tsv", numOfGame, type));
-    // Path outFile = Paths.get("result." + type + ".tsv");
-    int max = 1000;
-    // int i = 0;
+
     try (BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
       for (int[] onePerson : result) {
         StringBuilder sb = new StringBuilder();
@@ -301,7 +192,7 @@ public class Calc {
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
             .map(Fraction::toString).collect(Collectors.toList());
         }
-        if (type == ResultType.FRACTOIN_IN_FACTORIZATED) {
+        if (type == ResultType.FRACTION_IN_FACTORED) {
           int dominator = result[0][result[0].length - 1];
           newList = IntStream.of(onePerson).mapToObj(a -> new Fraction(a, dominator))
             .map(Fraction::toStringWithFactorized).collect(Collectors.toList());
@@ -315,21 +206,10 @@ public class Calc {
 
   }
 
-  static void convertResultFile(int numOfGame, ResultType type) {
-    int numOfMember = 0;
-
-    while (numOfGame != 1) {
-      numOfMember++;
-      numOfGame /= 2;
-    }
-
-    LOGGER.info(numOfMember);
-  }
-
   /**
-   * @return トーナメントでの１チームの最大試合数。あるいはトーナメント表の高さ
+   * @param numOfMember number of member of tournament. should be 2 , 4, 8 , 16 or some 2^n.
+   * @return height of the tournament. or maximum number of game for one team.
    */
-
   static int calcNumOfGameByNumOfMember(int numOfMember) {
     int numOfGame = 0;
     while (numOfMember != 1) {
