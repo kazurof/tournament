@@ -112,7 +112,7 @@ public class Calc {
 
 
   /**
-   * data.[numOfGame].tsv を読み込み、 トーナメントを実行し、参加者ごとの結果を返します。
+   * read tournament data(data.[numOfGame].tsv), execute , return result by member.
    */
   public static int[][] analyseFromTournamentDataFile(int numOfGame) {
 
@@ -129,28 +129,24 @@ public class Calc {
       while ((tornament = br.readLine()) != null) {
         String[] splitted = tornament.split("\t");
 
-//        LinkedList<Integer> tornament1 = new LinkedList<>();
         LinkedList<Integer> tornament1 =
           Arrays.stream(splitted).map(Integer::parseInt).collect(
             LinkedList::new, LinkedList::add, LinkedList::addAll);
 
-//        for (String num : splitted) {
-//          tornament1.add(Integer.parseInt(num));
-//        }
         executeTornament(tornament1, tornament1.size());
 
         int numOfWin = 0;
-        int thisMenber = member;
+        int thisMember = member;
 
-        while (thisMenber != 0) {
-          int from = thisMenber / 2;
-          int to = thisMenber;
+        while (thisMember != 0) {
+          int from = thisMember / 2;
+          int to = thisMember;
           for (int i = from; i < to; i++) {
             int person = tornament1.get(i);
             totalResult[person][numOfWin]++;
           }
           numOfWin++;
-          thisMenber = from;
+          thisMember = from;
         }
 
         if (count % 1000000 == 0) {
@@ -284,9 +280,7 @@ public class Calc {
   public static void generateResultToFile(int[][] result, ResultType type) {
     int numOfGame = calcNumOfGameByNumOfMember(result.length);
     Path outFile = Paths.get(String.format("result.%d.%s.tsv", numOfGame, type));
-    // Path outFile = Paths.get("result." + type + ".tsv");
-    int max = 1000;
-    // int i = 0;
+
     try (BufferedWriter writer = Files.newBufferedWriter(outFile, StandardOpenOption.CREATE)) {
       for (int[] onePerson : result) {
         StringBuilder sb = new StringBuilder();
