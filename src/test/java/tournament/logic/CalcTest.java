@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,19 +42,15 @@ public class CalcTest {
   @Test
   public void testCalcDoublePermutation() {
     List<List<Integer>> result = new ArrayList<>();
-    List<Integer> candidate = new ArrayList<>();
-    List<Integer> remains = new ArrayList<>();
+    List<Integer> remains = Stream.iterate(0, i -> i + 1).limit(8).collect(Collectors.toList());
 
-    for (int i = 1; i <= 8; i++) {
-      remains.add(i);
-    }
+    Calc.calcDoublePermutation(result, new ArrayList<>(), remains);
 
-    Calc.calcDoublePermutation(result, candidate, remains);
-    // result.stream().
     for (List<Integer> perm : result) {
       System.out.println(perm);
     }
     System.out.println(result.size());
+    assertThat(result.size(), is(105));
   }
 
 
