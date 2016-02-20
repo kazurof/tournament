@@ -1,9 +1,18 @@
 package tournament.logic;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -11,13 +20,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.JUnitCore;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
-
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Files.class})
+@PowerMockIgnore("javax.management.*")
 public class CalcTest {
   static final Logger LOGGER = LogManager.getLogger(CalcTest.class);
 
@@ -27,14 +38,25 @@ public class CalcTest {
 
 
   @Test
-  @Ignore
-  public void test() {
+  public void testAnalyseFromTournamentDataFile() throws Exception {
+    PowerMockito.mockStatic(Files.class);
 
-//    int[][] result = Calc.calcStatistics(1);
-//    assertArrayEquals(new int[] {2}, result[0]);
-//    assertArrayEquals(new int[] {2}, result[1]);
+    StringBuilder sb = new StringBuilder();
+    sb.append("0\t1\t2\t3" + System.lineSeparator());
+    sb.append("0\t2\t1\t3" + System.lineSeparator());
+    sb.append("0\t3\t1\t1" + System.lineSeparator());
 
+    StringReader sr = new StringReader(sb.toString());
+    when(Files.newBufferedReader(any())).thenReturn(new BufferedReader(sr));
+    int[][] result = Calc.analyseFromTournamentDataFile(2);
+
+    assertArrayEquals(result[0], new int[]{0,0,3});
+    assertArrayEquals(result[1], new int[]{1,2,0});
+    assertArrayEquals(result[2], new int[]{2,1,0});
+    assertArrayEquals(result[3], new int[]{3,0,0});
+    assertThat(result.length , is(4));
   }
+
 
   @Test
   public void testCalcDoublePermutation() {
@@ -46,6 +68,7 @@ public class CalcTest {
     assertThat(result.get(0).toString(), is("[1, 2]"));
     assertThat(result.size(), is(1));
   }
+
   @Test
   public void testCalcDoublePermutation_4() {
     List<List<Integer>> result = new ArrayList<>();
