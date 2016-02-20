@@ -1,4 +1,6 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -19,6 +21,8 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.5'
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
   testCompile 'junit:junit:4.12'
+  testCompile 'org.powermock:powermock-module-junit4:1.6.4'
+  testCompile 'org.powermock:powermock-api-mockito:1.6.4'
 }
 
 task generate(type: JavaExec) {
