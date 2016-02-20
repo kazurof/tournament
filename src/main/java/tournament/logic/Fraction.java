@@ -23,11 +23,6 @@ public class Fraction {
     }
   }
 
-  public Fraction(long n) {
-    numerator = n;
-    dominator = 1;
-  }
-
   public String toString() {
     if (dominator == 1 || numerator == 0) {
       return numerator + "";
