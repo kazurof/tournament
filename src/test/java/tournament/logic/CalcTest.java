@@ -66,7 +66,7 @@ public class CalcTest {
     List<Integer> remains = Stream.iterate(1, i -> i + 1).limit(8).collect(Collectors.toList());
 
     Calc.calcDoublePermutation(result, new ArrayList<>(), remains);
-    
+
     assertThat(result.get(0).toString(), is("[1, 2, 3, 4, 5, 6, 7, 8]"));
     assertThat(result.get(1).toString(), is("[1, 2, 3, 4, 5, 7, 6, 8]"));
     assertThat(result.get(2).toString(), is("[1, 2, 3, 4, 5, 8, 6, 7]"));
@@ -78,11 +78,11 @@ public class CalcTest {
 
 
   @Test
-  public void testExecuteTornament() {
-    LinkedList<Integer> tornament1 = new LinkedList<>();
-    tornament1.addAll(Arrays.asList(3, 2, 1, 0));
-    Calc.executeTournament(tornament1, tornament1.size());
-    assertThat(tornament1.toString(), is("[0, 2, 3, 1]"));
+  public void testExecuteTournament() {
+    LinkedList<Integer> tournament1 = new LinkedList<>();
+    tournament1.addAll(Arrays.asList(3, 2, 1, 0));
+    Calc.executeTournament(tournament1, tournament1.size());
+    assertThat(tournament1.toString(), is("[0, 2, 3, 1]"));
 
     LinkedList<Integer> tornament2 = new LinkedList<>();
     tornament2.addAll(Arrays.asList(3, 0, 1, 2));
@@ -91,33 +91,29 @@ public class CalcTest {
 
 
     LinkedList<Integer> tornament3 = new LinkedList<>();
-    // tornament3.addAll(Arrays.asList(1, 6, 2, 8, 3, 4, 5, 7));
     tornament3.addAll(Arrays.asList(0, 5, 1, 7, 2, 3, 4, 6));
     Calc.executeTournament(tornament3, tornament3.size());
-    LOGGER.info(tornament3);
     assertThat(tornament3.toString(), is("[0, 2, 1, 4, 5, 7, 3, 6]"));
   }
 
-
-  @Test
-  public void testAnalyseFromFile() {
-    // Calc.analyseFromFile(2);
-    // Calc.analyseFromFile(3);
-    int[][] result = Calc.analyseFromTournamentDataFile(3);
-    LOGGER.info(Arrays.deepToString(result));
-  }
-
-  @Test
-  public void testGenerateResultToFile() {
-    // Calc.analyseFromFile(2);
-    // Calc.analyseFromFile(3);
-    int[][] result = Calc.analyseFromTournamentDataFile(4);
+//
+//  @Test
+//  public void testAnalyseFromFile() {
+//    int[][] result = Calc.analyseFromTournamentDataFile(3);
+//    LOGGER.info(Arrays.deepToString(result));
+//  }
+//
+//  @Test
+//  public void testGenerateResultToFile() {
+//    // Calc.analyseFromFile(2);
+//    // Calc.analyseFromFile(3);
 //    int[][] result = Calc.analyseFromTournamentDataFile(4);
-//    Calc.generateResultToFile(result, ResultType.RAW_VALUE);
-//    Calc.generateResultToFile(result, ResultType.FRACTION);
-    Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
-    LOGGER.info(Arrays.deepToString(result));
-  }
+////    int[][] result = Calc.analyseFromTournamentDataFile(4);
+////    Calc.generateResultToFile(result, ResultType.RAW_VALUE);
+////    Calc.generateResultToFile(result, ResultType.FRACTION);
+//    Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
+//    LOGGER.info(Arrays.deepToString(result));
+//  }
 
   @Test
   public void testCalcNumOfGameByNumOfMember() {
