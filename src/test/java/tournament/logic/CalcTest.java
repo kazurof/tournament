@@ -36,18 +36,43 @@ public class CalcTest {
 
   }
 
-
   @Test
   public void testCalcDoublePermutation() {
     List<List<Integer>> result = new ArrayList<>();
-    List<Integer> remains = Stream.iterate(0, i -> i + 1).limit(8).collect(Collectors.toList());
+    List<Integer> remains = Stream.iterate(1, i -> i + 1).limit(2).collect(Collectors.toList());
 
     Calc.calcDoublePermutation(result, new ArrayList<>(), remains);
 
-    for (List<Integer> perm : result) {
-      System.out.println(perm);
-    }
-    System.out.println(result.size());
+    assertThat(result.get(0).toString(), is("[1, 2]"));
+    assertThat(result.size(), is(1));
+  }
+  @Test
+  public void testCalcDoublePermutation_4() {
+    List<List<Integer>> result = new ArrayList<>();
+    List<Integer> remains = Stream.iterate(1, i -> i + 1).limit(4).collect(Collectors.toList());
+
+    Calc.calcDoublePermutation(result, new ArrayList<>(), remains);
+
+    assertThat(result.get(0).toString(), is("[1, 2, 3, 4]"));
+    assertThat(result.get(1).toString(), is("[1, 3, 2, 4]"));
+    assertThat(result.get(2).toString(), is("[1, 4, 2, 3]"));
+    assertThat(result.size(), is(3));
+  }
+
+
+  @Test
+  public void testCalcDoublePermutation_8() {
+    List<List<Integer>> result = new ArrayList<>();
+    List<Integer> remains = Stream.iterate(1, i -> i + 1).limit(8).collect(Collectors.toList());
+
+    Calc.calcDoublePermutation(result, new ArrayList<>(), remains);
+    
+    assertThat(result.get(0).toString(), is("[1, 2, 3, 4, 5, 6, 7, 8]"));
+    assertThat(result.get(1).toString(), is("[1, 2, 3, 4, 5, 7, 6, 8]"));
+    assertThat(result.get(2).toString(), is("[1, 2, 3, 4, 5, 8, 6, 7]"));
+    assertThat(result.get(100).toString(), is("[1, 8, 2, 6, 3, 5, 4, 7]"));
+    assertThat(result.get(104).toString(), is("[1, 8, 2, 7, 3, 6, 4, 5]"));
+
     assertThat(result.size(), is(105));
   }
 
