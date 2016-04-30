@@ -61,7 +61,7 @@ public class Fraction {
       bi = BigInteger.valueOf(prime);
     }
     if (1L < val) {
-      return String.valueOf(val);
+      result.add(val);
     }
     return result.stream().map(String::valueOf).collect(Collectors.joining("x"));
   }

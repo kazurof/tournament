@@ -31,6 +31,13 @@ public class FractionTest {
     assertThat(Fraction.factorize(16L), is("2x2x2x2"));
   }
 
+
+  @Test
+  public void testFactorizeSpecialCase() {
+    assertThat(Fraction.factorize(3826L), is("2x1913"));
+    assertThat(Fraction.factorize(17494L), is("2x8747"));
+  }
+
   @Test
   public void testFactorizeLargeCase() {
     assertThat(Fraction.factorize(23753L), is("23753"));
