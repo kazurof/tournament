@@ -119,24 +119,6 @@ public class CalcTest {
     assertThat(tornament3.toString(), is("[0, 2, 1, 4, 5, 7, 3, 6]"));
   }
 
-//
-//  @Test
-//  public void testAnalyseFromFile() {
-//    int[][] result = Calc.analyseFromTournamentDataFile(3);
-//    LOGGER.info(Arrays.deepToString(result));
-//  }
-//
-//  @Test
-//  public void testGenerateResultToFile() {
-//    // Calc.analyseFromFile(2);
-//    // Calc.analyseFromFile(3);
-//    int[][] result = Calc.analyseFromTournamentDataFile(4);
-////    int[][] result = Calc.analyseFromTournamentDataFile(4);
-////    Calc.generateResultToFile(result, ResultType.RAW_VALUE);
-////    Calc.generateResultToFile(result, ResultType.FRACTION);
-//    Calc.generateResultToFile(result, ResultType.FRACTION_IN_FACTORED);
-//    LOGGER.info(Arrays.deepToString(result));
-//  }
 
   @Test
   public void testCalcNumOfGameByNumOfMember() {
